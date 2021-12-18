@@ -26,15 +26,12 @@ import com.example.endtoenddemo.model.Response;
 import com.example.endtoenddemo.model.Request;
 import com.example.endtoenddemo.repository.TutorialRepository;
 
-
-
-
 @RestController
 @RequestMapping("/api")
 public class DemoController {
 	@Autowired
 	TutorialRepository tutorialRepository;
-	
+
 	@Autowired
 	ObjectMapping objectMapping;
 
@@ -47,14 +44,14 @@ public class DemoController {
 	public ResponseEntity<Response> createTutorial(@RequestBody Request request) {
 		try {
 			Tutorial tutorial = objectMapping.requestMappingToEntityModel(request);
-			Tutorial _tutorial=tutorialRepository.save(tutorial)	;
-			Response response=objectMapping.entityModelMappingToResponse(_tutorial);
+			Tutorial _tutorial = tutorialRepository.save(tutorial);
+			Response response = objectMapping.entityModelMappingToResponse(_tutorial);
 			return new ResponseEntity<>(response, HttpStatus.CREATED);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	@GetMapping("/tutorials")
 	public ResponseEntity<List<Tutorial>> getAllTutorials(@RequestParam(required = false) String title) {
 		try {
@@ -69,37 +66,37 @@ public class DemoController {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			}
 
-			
-
 			return new ResponseEntity<>(tutorials, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}}
-		
-    @DeleteMapping("/tutorials/{id}")
-    public String removeById(@PathVariable("id") long id) {
-    	tutorialRepository.deleteById(id);
-    	return "deleted succeffully";
-    }
-    @DeleteMapping("/delete/tutorials")
-    public String delete() {
-    	tutorialRepository.deleteAll();
-    	return "deleted succeffully";
-    }
-    
-    @PutMapping("/update/tutorials/{id}")
-    public String removeById(@RequestBody Request request,@PathVariable("id") long id) {
-    	Tutorial tutorials=new Tutorial();
-        Optional<Tutorial> tutorial_ = tutorialRepository.findById(id);
-    	if(tutorial_.isPresent()) {
-    		tutorials.setDescription(request.getDescription());
-    		tutorials.setTitle(request.getTitle());
-    		tutorials.setPublished(request.getPublished());
-    		tutorialRepository.save(tutorials);
-    	}
-    	
-    	return "updated successfully";
+		}
+	}
 
-    }
-  
-    }
+	@DeleteMapping("/tutorials/{id}")
+	public String removeById(@PathVariable("id") long id) {
+		tutorialRepository.deleteById(id);
+		return "deleted succeffully";
+	}
+
+	@DeleteMapping("/delete/tutorials")
+	public String delete() {
+		tutorialRepository.deleteAll();
+		return "deleted succeffully";
+	}
+
+	@PutMapping("/update/tutorials/{id}")
+	public String removeById(@RequestBody Request request, @PathVariable("id") long id) {
+		Tutorial tutorials = new Tutorial();
+		Optional<Tutorial> tutorial_ = tutorialRepository.findById(id);
+		if (tutorial_.isPresent()) {
+			tutorials.setDescription(request.getDescription());
+			tutorials.setTitle(request.getTitle());
+			tutorials.setPublished(request.getPublished());
+			tutorialRepository.save(tutorials);
+		}
+
+		return "updated successfully";
+
+	}
+
+}
